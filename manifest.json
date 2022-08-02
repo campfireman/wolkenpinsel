@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "wolkenpinsel",
+  "version": "0.1.0",
+  "description": "Changes the color of the google cloud project based on the project",
+  "icons": {
+    "48": "icons/logo.svg",
+    "96": "icons/logo.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://console.cloud.google.com/*"
+      ],
+      "js": [
+        "./src/gcp.js"
+      ]
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hello@ture.dev"
+    }
+  }
+}
