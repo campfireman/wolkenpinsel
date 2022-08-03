@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "description": "Changes the color of the google cloud project based on the project",
   "icons": {
-    "48": "icons/logo.svg",
-    "96": "icons/logo.svg"
+    "48": "logo/logo-48.png",
+    "96": "logo/logo-96.png"
   },
   "content_scripts": [
     {
