@@ -17,6 +17,9 @@
       ]
     }
   ],
+  "options_ui": {
+    "page": "./src/settings.html"
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "hello@ture.dev"
