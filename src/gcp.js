@@ -1,17 +1,22 @@
-const colorMap = {
-  "default": "blue",
-  "bachelor-thesis-332216": "green",
-  "gcp-it-dr-dropstock2-dev-j7f": "green",
-  "gcp-it-dr-dropstock2-stage-ka5": "orange",
-  "gcp-it-dr-dropstock2-live-3nw": "red",
-};
+function loadSettings(key) {
+    return browser.storage.sync.get(key)
+}
 
-function listenForUrlChange() {
+function loadGcpColorSettings() {
+    return loadSettings("gcp-settings");
+}
+loadGcpColorSettings().then(listenForUrlChange, onError);
+
+function onError(error) {
+  console.log("Error loading wolkenpinsel settings!" + error)
+}
+
+function listenForUrlChange(settings) {
   let previousUrl = '';
   const observer = new MutationObserver(function(mutations) {
     if (window.location.href !== previousUrl) {
         previousUrl = window.location.href;
-        changeBarColor();
+        changeBarColor(settings["gcp-settings"]);
       }
   });
   const config = {subtree: true, childList: true};
@@ -21,7 +26,7 @@ function listenForUrlChange() {
 }
 
 
-function changeBarColor() {
+function changeBarColor(colorMap) {
   const banner = document.getElementsByClassName("cfc-platform-bar-container");
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -47,5 +52,4 @@ function changeBarColor() {
   banner[0].style.backgroundColor = barColor;
 }
 
-changeBarColor();
-listenForUrlChange();
+// listenForUrlChange();

@@ -1,15 +1,9 @@
 
-const colorMap = {
-  "default": "blue",
-  "bachelor-thesis-332216": "green",
-  "gcp-it-dr-dropstock2-dev-j7f": "green",
-  "gcp-it-dr-dropstock2-stage-ka5": "orange",
-  "gcp-it-dr-dropstock2-live-3nw": "red",
-};
+const GCP_SETTINGS_KEY = "gcp-settings";
 const gcpColorFormset = document.getElementById("gcp-colors");
 
 function restoreInput() {
-    for (project in colorMap) {
+    for (project in loadGcpColorSettings()) {
         appendGcpColorFormsetRow(project, colorMap[project])
     }
 }
@@ -38,8 +32,35 @@ function appendEmptyGcpFormsetRow() {
     appendGcpColorFormsetRow("", "");
 }
 
-function submit() {
+function getGcpColorFormsetData() {
 
+}
+
+function submit(e) {
+    e.preventDefault();
+    const colorMap = {
+        "default": "#3367d6",
+        "bachelor-thesis-332216": "green",
+        "gcp-it-dr-dropstock2-dev-j7f": "green",
+        "gcp-it-dr-dropstock2-stage-ka5": "orange",
+        "gcp-it-dr-dropstock2-live-3nw": "red",
+    };
+    saveSettings(GCP_SETTINGS_KEY, colorMap);
+    // saveSettings(GCP_SETTINGS_KEY, getGcpColorFormsetData());
+}
+
+function saveSettings(key, settings) {
+    browser.storage.sync.set({
+        [key]: settings
+    });
+}
+
+function loadSettings(key) {
+    return browser.storage.sync.get(key)
+}
+
+function loadGcpColorSettings() {
+    return loadSettings(GCP_SETTINGS_KEY);
 }
 
 document.addEventListener("DOMContentLoaded", restoreInput);

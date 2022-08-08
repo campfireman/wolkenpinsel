@@ -20,9 +20,12 @@
   "options_ui": {
     "page": "./src/settings.html"
   },
+  "permissions": [
+    "storage"
+  ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "hello@ture.dev"
+      "id": "wolkenpinsel@ture.dev"
     }
   }
 }
