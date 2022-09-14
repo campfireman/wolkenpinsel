@@ -1,4 +1,6 @@
 const { defineConfig } = require("@vue/cli-service");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+
 module.exports = defineConfig({
   transpileDependencies: true,
   pages: {
@@ -20,6 +22,15 @@ module.exports = defineConfig({
     },
   },
   configureWebpack: {
-    devtool: 'source-map',
-},
+    devtool: "source-map",
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: "node_modules/webextension-polyfill/dist/browser-polyfill.js",
+          },
+        ],
+      }),
+    ],
+  },
 });

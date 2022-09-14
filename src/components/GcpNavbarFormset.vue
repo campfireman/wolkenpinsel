@@ -53,6 +53,7 @@
 
 <script>
 import RandomGenerator from "./RandomGenerator";
+var browser = require("webextension-polyfill/dist/browser-polyfill.min");
 
 export default {
   name: "GcpNavbarFormset",
@@ -64,7 +65,7 @@ export default {
     };
   },
   mounted() {
-    chrome.storage.sync.get("gcpColorSettings", (data) => {
+    browser.storage.sync.get("gcpColorSettings").then((data) => {
       if (data.gcpColorSettings) {
         Object.entries(data.gcpColorSettings).forEach(([key, value]) => {
           let setting = value;
@@ -106,7 +107,7 @@ export default {
             return { [projectId]: copy };
           })
         );
-        chrome.storage.sync.set({ gcpColorSettings: dictionary });
+        browser.storage.sync.set({ gcpColorSettings: dictionary });
         this.unsaved = false;
       } else {
         this.shake = true;

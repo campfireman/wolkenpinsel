@@ -1,5 +1,5 @@
 function loadSettings(key, callback) {
-  return chrome.storage.sync.get(key, callback);
+  return browser.storage.sync.get(key).then(callback);
 }
 
 function loadGcpColorSettings(callback) {

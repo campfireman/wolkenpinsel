@@ -17,6 +17,7 @@
         "https://console.cloud.google.com/*"
       ],
       "js": [
+        "browser-polyfill.js",
         "js/content-script.js"
       ]
     }
