@@ -26,5 +26,10 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wolkenpinsel@ture.dev"
+    }
+  }
 }
