@@ -13,3 +13,11 @@ This add-on utilizes [vue-cli-plugin-browser-extension](https://github.com/adamb
 3. npm run build
 
 If build fails remove the lines 117-122 in `./node_modules/vue-cli-plugin-browser-extension/index.js`. This fixes the compatibilty issues.
+
+## Screenshots
+
+![Settings](docs/wolkenpinsel_screenshot_settings.png)
+
+![Example 1](docs/wolkenpinsel_screenshot_gcp_example1.png)
+
+![Example 2](docs/wolkenpinsel_screenshot_gcp_example2.png)
