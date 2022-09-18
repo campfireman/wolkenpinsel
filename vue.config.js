@@ -22,7 +22,6 @@ module.exports = defineConfig({
     },
   },
   configureWebpack: {
-    devtool: "source-map",
     plugins: [
       new CopyWebpackPlugin({
         patterns: [
