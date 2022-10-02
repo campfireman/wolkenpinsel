@@ -6,13 +6,11 @@ A tool to colorize your cloud dashboards. At the moment only the GCP console is 
 
 ## Development
 
-This add-on utilizes [vue-cli-plugin-browser-extension](https://github.com/adambullmer/vue-cli-plugin-browser-extension) to build. Unfortunately the package is a bit broken atm, it might require local patching.
+This add-on utilizes [vue-cli-plugin-browser-extension](https://github.com/adambullmer/vue-cli-plugin-browser-extension) to build. Unfortunately the package is a bit broken atm, so this build uses a [patch](https://github.com/campfireman/vue-cli-plugin-browser-extension).
 
 1. cd /in/to/project/folder
 2. npm run install
 3. npm run build
-
-If build fails remove the lines 117-122 in `./node_modules/vue-cli-plugin-browser-extension/index.js`. This fixes the compatibilty issues.
 
 ## Screenshots
 
@@ -32,3 +30,15 @@ wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-softwar
 - Good documentation
 - Make the common things easy
 - A cute name
+
+## Roadmap
+
+- [ ] Make storage format more extensible
+- [ ] Add validation
+- [ ] Add build scripts for Firefox, Chromium and Opera
+- [ ] Add CI/Pipeline for publishing
+- [ ] Add rule hierarchy
+- [ ] Add support for regex
+- [ ] Add rule for changing the GCP Avatar
+- [ ] Add selenium GUI tests
+- [ ] Update logo to use colors form stylesheet
