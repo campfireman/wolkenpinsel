@@ -11,9 +11,7 @@
     "@picocss/pico": "^1.5.3",
     "core-js": "^3.8.3",
     "material-symbols": "^0.2.8",
-    "vue": "^2.6.14",
-    "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
+    "vue": "^2.6.14"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
