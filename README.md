@@ -21,3 +21,14 @@ If build fails remove the lines 117-122 in `./node_modules/vue-cli-plugin-browse
 ![Example 1](docs/wolkenpinsel_screenshot_gcp_example1.png)
 
 ![Example 2](docs/wolkenpinsel_screenshot_gcp_example2.png)
+
+## Philosophy
+
+wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-software/):
+
+- Customizability
+- Keyboard-focused navigation
+- Non-corporate governance
+- Good documentation
+- Make the common things easy
+- A cute name
