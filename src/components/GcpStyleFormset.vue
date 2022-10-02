@@ -59,7 +59,7 @@ export default {
   name: "GcpStyleFormset",
   data() {
     return {
-      gcpColorSettings: [],
+      gcpStyleRules: [],
       unsaved: false,
       shake: false,
     };
@@ -76,14 +76,14 @@ export default {
       );
     },
     addColorSetting(projectId, navbarColor) {
-      this.gcpColorSettings.push({
+      this.gcpStyleRules.push({
         projectId: projectId,
         navbarColor: navbarColor,
       });
       this.setUnsaved();
     },
     deleteRow(index) {
-      this.gcpColorSettings.splice(index, 1);
+      this.gcpStyleRules.splice(index, 1);
       this.setUnsaved();
     },
     save(e) {
@@ -91,7 +91,7 @@ export default {
       if (this.unsaved) {
         let dictionary = Object.assign(
           {},
-          ...this.gcpColorSettings.map((x) => {
+          ...this.gcpStyleRules.map((x) => {
             let copy = { ...x };
             let projectId = copy.projectId;
             delete copy.projectId;
@@ -119,7 +119,7 @@ export default {
           Object.entries(data.gcpColorSettings).forEach(([key, value]) => {
             let setting = value;
             setting.projectId = key;
-            this.gcpColorSettings.push(setting);
+            this.gcpStyleRules.push(setting);
           });
           this.setSaved();
         }
