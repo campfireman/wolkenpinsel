@@ -3,7 +3,7 @@
     <form>
       <table>
         <tbody>
-          <tr v-for="(setting, index) in gcpColorSettings" :key="index">
+          <tr v-for="(setting, index) in gcpStyleRules" :key="index">
             <td>
               <label
                 >Project ID
@@ -52,8 +52,8 @@
 </template>
 
 <script>
+import BrowserStorage from "./BrowserStorage";
 import RandomGenerator from "./RandomGenerator";
-var browser = require("webextension-polyfill/dist/browser-polyfill.min");
 
 export default {
   name: "GcpStyleFormset",
@@ -89,16 +89,7 @@ export default {
     save(e) {
       e.preventDefault();
       if (this.unsaved) {
-        let dictionary = Object.assign(
-          {},
-          ...this.gcpStyleRules.map((x) => {
-            let copy = { ...x };
-            let projectId = copy.projectId;
-            delete copy.projectId;
-            return { [projectId]: copy };
-          })
-        );
-        browser.storage.sync.set({ gcpColorSettings: dictionary });
+        BrowserStorage.setGcpStyleRules(this.gcpStyleRules);
         this.setSaved();
       } else {
         this.shake = true;
@@ -113,17 +104,9 @@ export default {
     setSaved() {
       this.unsaved = false;
     },
-    loadSettings() {
-      browser.storage.sync.get("gcpColorSettings").then((data) => {
-        if (data.gcpColorSettings) {
-          Object.entries(data.gcpColorSettings).forEach(([key, value]) => {
-            let setting = value;
-            setting.projectId = key;
-            this.gcpStyleRules.push(setting);
-          });
-          this.setSaved();
-        }
-      });
+    async loadSettings() {
+      this.gcpStyleRules = await BrowserStorage.getGcpStyleRules();
+      this.setSaved();
     },
     setUnsavedChangesConfirmation() {
       window.onbeforeunload = () => (this.unsaved ? true : null);
