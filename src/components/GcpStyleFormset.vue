@@ -56,7 +56,7 @@ import RandomGenerator from "./RandomGenerator";
 var browser = require("webextension-polyfill/dist/browser-polyfill.min");
 
 export default {
-  name: "GcpNavbarFormset",
+  name: "GcpStyleFormset",
   data() {
     return {
       gcpColorSettings: [],

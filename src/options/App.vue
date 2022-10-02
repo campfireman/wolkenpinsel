@@ -2,17 +2,17 @@
   <main>
     <article>
       <header>GCP colors</header>
-      <GcpNavbarFormset />
+      <GcpStyleFormset />
     </article>
   </main>
 </template>
 
 <script>
-import GcpNavbarFormset from "@/components/GcpNavbarFormset.vue";
+import GcpStyleFormset from "@/components/GcpStyleFormset.vue";
 
 export default {
   name: "App",
-  components: { GcpNavbarFormset },
+  components: { GcpStyleFormset },
 };
 </script>
 
