@@ -1,18 +1,38 @@
-function loadSettings(key, callback) {
-  return browser.storage.sync.get(key).then(callback);
+import BrowserStorage from "@/components/BrowserStorage";
+
+const GCP_NAVBAR_DEFAULT_COLOR = "#1a73e8";
+
+const browser = require("webextension-polyfill/dist/browser-polyfill.min");
+const storage = new BrowserStorage(browser.storage.sync);
+storage.getStyleRules().then((styleRules) => {
+  listenForUrlChange(styleRules);
+});
+
+function getProjectId() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (!urlParams.has("project")) {
+    console.log("Url does not contain project query param!");
+    return "";
+  }
+  return urlParams.get("project");
 }
 
-function loadGcpColorSettings(callback) {
-  return loadSettings("gcpColorSettings", callback);
-}
-loadGcpColorSettings((settings) => listenForUrlChange(settings));
-
-function listenForUrlChange(settings) {
+function listenForUrlChange(styleRules) {
   let previousUrl = "";
-  const observer = new MutationObserver(function () {
+  const observer = new MutationObserver(() => {
     if (window.location.href !== previousUrl) {
       previousUrl = window.location.href;
-      changeBarColor(settings.gcpColorSettings);
+      let projectId = getProjectId();
+      changeBarColor(GCP_NAVBAR_DEFAULT_COLOR);
+      styleRules.gcpStyleRules
+        .filter((rule) => {
+          let regex = new RegExp(`^${rule.projectIdPattern}$`);
+          return regex.test(projectId);
+        })
+        .forEach((rule) => {
+          console.log(rule);
+          changeBarColor(rule.styles[0].value);
+        });
     }
   });
   const config = { subtree: true, childList: true };
@@ -21,9 +41,8 @@ function listenForUrlChange(settings) {
   observer.observe(document, config);
 }
 
-function changeBarColor(colorMap) {
+function changeBarColor(color) {
   const banner = document.getElementsByClassName("cfc-platform-bar-container");
-  const urlParams = new URLSearchParams(window.location.search);
 
   if (banner.length != 1) {
     console.log("Navigation bar identifier not unique!");
@@ -32,21 +51,6 @@ function changeBarColor(colorMap) {
     throw "Navigation bar identifier not unique!";
   }
 
-  if (!urlParams.has("project")) {
-    console.log("Url does not contain project query param!");
-    throw "Url does not contain project query param!";
-  }
-
-  const projectId = urlParams.get("project");
-
-  if (Object.prototype.hasOwnProperty.call(colorMap, projectId)) {
-    const navbarColor = colorMap[projectId].navbarColor;
-
-    console.log("Changing color of nav bar to " + navbarColor);
-    banner[0].style.backgroundColor = navbarColor;
-  } else if (Object.prototype.hasOwnProperty.call(colorMap, "default")) {
-    banner[0].style.backgroundColor = colorMap.default.navbarColor;
-  } else {
-    banner[0].style.backgroundColor = "#3367d6";
-  }
+  console.log("Changing color of nav bar to " + color);
+  banner[0].style.backgroundColor = color;
 }

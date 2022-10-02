@@ -33,7 +33,7 @@ wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-softwar
 
 ## Roadmap
 
-- [ ] Make storage format more extensible
+- [x] Make storage format more extensible
 - [ ] Add validation
 - [ ] Add build scripts for Firefox, Chromium and Opera
 - [ ] Add CI/Pipeline for publishing
@@ -42,3 +42,28 @@ wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-softwar
 - [ ] Add rule for changing the GCP Avatar
 - [ ] Add selenium GUI tests
 - [ ] Update logo to use colors form stylesheet
+
+## Documentation
+
+### Storage Format
+
+```[json]
+{
+    ...
+    "wolkenpinsel": {
+        "formatVersion": "1.0.0",
+        "gcpStyleRules": [
+            {
+                "projectIdPattern": ".*live.*",
+                "styles": [
+                    {
+                        "name": "gcpNavbarColor",
+                        "value": "#000000"
+                    }
+                ]
+            }
+        ]
+    },
+    ...
+}
+```

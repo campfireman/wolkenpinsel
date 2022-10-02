@@ -3,39 +3,39 @@
     <form>
       <table>
         <tbody>
-          <tr v-for="(setting, index) in gcpStyleRules" :key="index">
+          <tr v-for="(rule, index) in styleRules.gcpStyleRules" :key="index">
             <td>
               <label
                 >Project ID
                 <input
                   type="text"
-                  v-model="setting.projectId"
+                  v-model="rule.projectIdPattern"
                   @input="setUnsaved"
                 />
               </label>
             </td>
             <td>
-              <label
-                >Navigation bar color
+              <label v-for="(style, index) in rule.styles" :key="index"
+                >{{ style.name }}
                 <input
                   :style="{
-                    border: '5px solid ' + setting.navbarColor,
+                    border: '5px solid ' + style.value,
                   }"
                   type="text"
-                  v-model="setting.navbarColor"
+                  v-model="style.value"
                   @input="setUnsaved"
                 />
               </label>
             </td>
             <td>
-              <a class="" @click="deleteRow(index)"
+              <a class="" @click="deleteGcpStyleRule(index)"
                 ><span class="material-symbols-outlined delete">delete</span></a
               >
             </td>
           </tr>
         </tbody>
       </table>
-      <button type="button" class="add" @click="addRandomRow">
+      <button type="button" class="add" @click="addRandomGcpStyleRule">
         <span>Add project</span>
       </button>
       <button
@@ -55,11 +55,14 @@
 import BrowserStorage from "./BrowserStorage";
 import RandomGenerator from "./RandomGenerator";
 
+const browser = require("webextension-polyfill/dist/browser-polyfill.min");
+const storage = new BrowserStorage(browser.storage.sync);
+
 export default {
   name: "GcpStyleFormset",
   data() {
     return {
-      gcpStyleRules: [],
+      styleRules: {},
       unsaved: false,
       shake: false,
     };
@@ -69,27 +72,32 @@ export default {
     this.setUnsavedChangesConfirmation();
   },
   methods: {
-    addRandomRow() {
-      this.addColorSetting(
+    addRandomGcpStyleRule() {
+      this.addGcpStyleRule(
         RandomGenerator.getRandomProjectName(),
         RandomGenerator.getRandomColor()
       );
     },
-    addColorSetting(projectId, navbarColor) {
-      this.gcpStyleRules.push({
-        projectId: projectId,
-        navbarColor: navbarColor,
+    addGcpStyleRule(projectId, navbarColor) {
+      this.styleRules.gcpStyleRules.push({
+        projectIdPattern: projectId,
+        styles: [
+          {
+            name: "gcpNavbarColor",
+            value: navbarColor,
+          },
+        ],
       });
       this.setUnsaved();
     },
-    deleteRow(index) {
-      this.gcpStyleRules.splice(index, 1);
+    deleteGcpStyleRule(index) {
+      this.styleRules.gcpStyleRules.splice(index, 1);
       this.setUnsaved();
     },
     save(e) {
       e.preventDefault();
       if (this.unsaved) {
-        BrowserStorage.setGcpStyleRules(this.gcpStyleRules);
+        storage.setStyleRules(this.styleRules);
         this.setSaved();
       } else {
         this.shake = true;
@@ -105,7 +113,7 @@ export default {
       this.unsaved = false;
     },
     async loadSettings() {
-      this.gcpStyleRules = await BrowserStorage.getGcpStyleRules();
+      this.styleRules = await storage.getStyleRules();
       this.setSaved();
     },
     setUnsavedChangesConfirmation() {
