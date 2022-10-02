@@ -65,17 +65,8 @@ export default {
     };
   },
   mounted() {
-    browser.storage.sync.get("gcpColorSettings").then((data) => {
-      if (data.gcpColorSettings) {
-        Object.entries(data.gcpColorSettings).forEach(([key, value]) => {
-          let setting = value;
-          setting.projectId = key;
-          this.gcpColorSettings.push(setting);
-        });
-        this.unsaved = false;
-      }
-    });
-    window.onbeforeunload = () => (this.unsaved ? true : null);
+    this.loadSettings();
+    this.setUnsavedChangesConfirmation();
   },
   methods: {
     addRandomRow() {
@@ -89,11 +80,11 @@ export default {
         projectId: projectId,
         navbarColor: navbarColor,
       });
-      this.unsaved = true;
+      this.setUnsaved();
     },
     deleteRow(index) {
       this.gcpColorSettings.splice(index, 1);
-      this.unsaved = true;
+      this.setUnsaved();
     },
     save(e) {
       e.preventDefault();
@@ -108,7 +99,7 @@ export default {
           })
         );
         browser.storage.sync.set({ gcpColorSettings: dictionary });
-        this.unsaved = false;
+        this.setSaved();
       } else {
         this.shake = true;
         setTimeout(() => {
@@ -118,6 +109,24 @@ export default {
     },
     setUnsaved() {
       this.unsaved = true;
+    },
+    setSaved() {
+      this.unsaved = false;
+    },
+    loadSettings() {
+      browser.storage.sync.get("gcpColorSettings").then((data) => {
+        if (data.gcpColorSettings) {
+          Object.entries(data.gcpColorSettings).forEach(([key, value]) => {
+            let setting = value;
+            setting.projectId = key;
+            this.gcpColorSettings.push(setting);
+          });
+          this.setSaved();
+        }
+      });
+    },
+    setUnsavedChangesConfirmation() {
+      window.onbeforeunload = () => (this.unsaved ? true : null);
     },
   },
 };
