@@ -41,4 +41,9 @@ export default {
 header {
   font-size: 2em;
 }
+
+.material-symbols-outlined {
+  display: inline-flex;
+  vertical-align: top;
+}
 </style>

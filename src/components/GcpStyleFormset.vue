@@ -3,7 +3,7 @@
     <form>
       <table>
         <tbody>
-          <tr v-for="(rule, index) in styleRules.gcpStyleRules" :key="index">
+          <tr v-for="(rule, i) in styleRules.gcpStyleRules" :key="i">
             <td>
               <label
                 >Project ID
@@ -11,17 +11,14 @@
               </label>
             </td>
             <td>
-              <label v-for="(style, index) in rule.styles" :key="index"
-                >{{ style.name }}
-                <input
-                  :style="{
-                    border: '5px solid ' + style.value,
-                  }"
-                  type="text"
-                  v-model="style.value"
-                  @input="setUnsaved"
-                />
-              </label>
+              <component
+                v-for="(style, j) in rule.styles"
+                :key="j"
+                v-bind:is="style.name + 'Field'"
+                v-model="style.value"
+                @input="setUnsaved"
+                @validate="updateValidationErrors"
+              />
             </td>
             <td>
               <a class="" @click="deleteGcpStyleRule(index)"
@@ -37,10 +34,13 @@
       <button
         type="submit"
         class="save-button"
-        :class="{ unsaved: unsaved, shake: shake }"
+        :class="{ unsaved: isUnsaved(), shake: shake, disabled: isInvalid() }"
         @click="save"
       >
-        <span v-if="unsaved">Save</span>
+        <span v-if="isInvalid()"
+          >Invalid <span class="material-symbols-outlined">block </span></span
+        >
+        <span v-else-if="unsaved">Save</span>
         <span v-else>Saved</span>
       </button>
     </form>
@@ -50,23 +50,30 @@
 <script>
 import BrowserStorage from "./BrowserStorage";
 import RandomGenerator from "./RandomGenerator";
+import gcpNavbarColorField from "./styles/GcpNavbarColorField.vue";
 
 const browser = require("webextension-polyfill/dist/browser-polyfill.min");
 const storage = new BrowserStorage(browser.storage.sync);
 
 export default {
   name: "GcpStyleFormset",
+  components: {
+    gcpNavbarColorField,
+  },
   data() {
     return {
       styleRules: {},
+      gcpValidationErrors: {},
       unsaved: false,
       shake: false,
+      disabled: false,
     };
   },
   mounted() {
     this.loadSettings();
     this.setUnsavedChangesConfirmation();
   },
+  computed: {},
   methods: {
     addRandomGcpStyleRule() {
       this.addGcpStyleRule(
@@ -92,7 +99,7 @@ export default {
     },
     save(e) {
       e.preventDefault();
-      if (this.unsaved) {
+      if (this.unsaved && this.isValid()) {
         storage.setStyleRules(this.styleRules);
         this.setSaved();
       } else {
@@ -115,6 +122,24 @@ export default {
     setUnsavedChangesConfirmation() {
       window.onbeforeunload = () => (this.unsaved ? true : null);
     },
+    isValid() {
+      return Object.keys(this.gcpValidationErrors).length == 0;
+    },
+    isInvalid() {
+      return Object.keys(this.gcpValidationErrors).length > 0;
+    },
+    updateValidationErrors(key, values) {
+      console.log(`values: ${JSON.stringify(values)}`);
+      if (Object.keys(values).length > 0) {
+        this.$set(this.gcpValidationErrors, key, values);
+      } else {
+        console.log("deleting");
+        this.$delete(this.gcpValidationErrors, key);
+      }
+    },
+    isUnsaved() {
+      return this.isValid() && this.unsaved;
+    },
   },
 };
 </script>
@@ -135,6 +160,11 @@ tr {
 .save-button {
   background-color: var(--grey);
   outline-color: var(--grey);
+}
+
+.disabled {
+  background-color: var(--red) !important;
+  outline-color: var(--red) !important;
 }
 
 .unsaved {
