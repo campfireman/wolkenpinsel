@@ -26,7 +26,7 @@ function listenForUrlChange(styleRules) {
       changeBarColor(GCP_NAVBAR_DEFAULT_COLOR);
       styleRules.gcpStyleRules
         .filter((rule) => {
-          let regex = new RegExp(`^${rule.projectIdPattern}$`);
+          let regex = new RegExp(`^${rule.pattern}$`);
           return regex.test(projectId);
         })
         .forEach((rule) => {

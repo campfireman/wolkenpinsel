@@ -12,7 +12,7 @@ describe("migrate010", () => {
       formatVersion: "1.0.0",
       gcpStyleRules: [
         {
-          projectIdPattern: "test-project01",
+          pattern: "test-project01",
           styles: [{ name: "gcpNavbarColor", value: "red" }],
         },
       ],

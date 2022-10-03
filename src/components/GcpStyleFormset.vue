@@ -7,11 +7,7 @@
             <td>
               <label
                 >Project ID
-                <input
-                  type="text"
-                  v-model="rule.projectIdPattern"
-                  @input="setUnsaved"
-                />
+                <input type="text" v-model="rule.pattern" @input="setUnsaved" />
               </label>
             </td>
             <td>
@@ -80,7 +76,7 @@ export default {
     },
     addGcpStyleRule(projectId, navbarColor) {
       this.styleRules.gcpStyleRules.push({
-        projectIdPattern: projectId,
+        pattern: projectId,
         styles: [
           {
             name: "gcpNavbarColor",

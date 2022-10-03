@@ -21,7 +21,7 @@ class BrowserStorage {
       let newSettings = this.deepCopy(this.STORAGE_TEMPLATE_100);
       for (const [key, value] of Object.entries(data.gcpColorSettings)) {
         newSettings.gcpStyleRules.push({
-          projectIdPattern: key,
+          pattern: key,
           styles: [{ name: "gcpNavbarColor", value: value.navbarColor }],
         });
       }
