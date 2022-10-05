@@ -5,15 +5,18 @@
         <tbody>
           <tr v-for="(rule, i) in styleRules.gcpStyleRules" :key="i">
             <td>
-              <label
-                >Project ID
-                <input type="text" v-model="rule.pattern" @input="setUnsaved" />
-              </label>
+              <PatternField
+                v-model="rule.pattern"
+                :prefix="i"
+                @input="setUnsaved"
+                @validate="updateValidationErrors"
+              />
             </td>
             <td>
               <component
                 v-for="(style, j) in rule.styles"
                 :key="j"
+                :prefix="i"
                 v-bind:is="style.name + 'Field'"
                 v-model="style.value"
                 @input="setUnsaved"
@@ -21,7 +24,7 @@
               />
             </td>
             <td>
-              <a class="" @click="deleteGcpStyleRule(index)"
+              <a class="" @click="deleteGcpStyleRule(i)"
                 ><span class="material-symbols-outlined delete">delete</span></a
               >
             </td>
@@ -42,11 +45,13 @@
         <span v-else>Saved</span>
       </button>
     </form>
+    {{ gcpValidationErrors }}
   </div>
 </template>
 
 <script>
 import BrowserStorage from "./BrowserStorage";
+import PatternField from "./PatternField.vue";
 import RandomGenerator from "./RandomGenerator";
 import gcpNavbarColorField from "./styles/GcpNavbarColorField.vue";
 
@@ -57,6 +62,7 @@ export default {
   name: "GcpStyleFormset",
   components: {
     gcpNavbarColorField,
+    PatternField,
   },
   data() {
     return {
@@ -93,6 +99,7 @@ export default {
     },
     deleteGcpStyleRule(index) {
       this.styleRules.gcpStyleRules.splice(index, 1);
+      this.deleteRowFromValidation(index);
       this.setUnsaved();
     },
     save(e) {
@@ -126,11 +133,20 @@ export default {
     isInvalid() {
       return Object.keys(this.gcpValidationErrors).length > 0;
     },
-    updateValidationErrors(key, values) {
+    deleteRowFromValidation(prefix) {
+      this.$delete(this.gcpValidationErrors, prefix);
+    },
+    updateValidationErrors(prefix, fieldKey, values) {
+      if (!(prefix in this.gcpValidationErrors)) {
+        this.$set(this.gcpValidationErrors, prefix, {});
+      }
       if (Object.keys(values).length > 0) {
-        this.$set(this.gcpValidationErrors, key, values);
+        this.$set(this.gcpValidationErrors[prefix], fieldKey, values);
       } else {
-        this.$delete(this.gcpValidationErrors, key);
+        this.$delete(this.gcpValidationErrors[prefix], fieldKey);
+        if (Object.keys(this.gcpValidationErrors[prefix]).length == 0) {
+          this.deleteRowFromValidation(prefix);
+        }
       }
     },
     isUnsaved() {

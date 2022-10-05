@@ -34,7 +34,7 @@ wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-softwar
 ## Roadmap
 
 - [x] Make storage format more extensible
-- [ ] Add validation
+- [x] Add validation
 - [ ] Add build scripts for Firefox, Chromium and Opera
 - [ ] Add CI/Pipeline for publishing
 - [ ] Add rule hierarchy
