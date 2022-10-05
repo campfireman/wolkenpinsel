@@ -7,7 +7,6 @@
       }"
       type="text"
       v-model="inputValue"
-      @focusout="validate(inputValue)"
     />
     <ul v-if="isInvalid()">
       <li v-for="(error, key) in validationErrors" :key="key" class="error">
@@ -44,11 +43,6 @@ export default {
       }
       this.$emit("validate", "gcpNavbarColor", this.validationErrors);
     },
-    conditionalValidate(input) {
-      if (this.hasValidated) {
-        this.validate(input);
-      }
-    },
     isInvalid() {
       return Object.keys(this.validationErrors).length > 0;
     },
@@ -59,8 +53,8 @@ export default {
         return this.value;
       },
       set(value) {
+        this.validate(value);
         this.$emit("input", value);
-        this.conditionalValidate(value);
       },
     },
   },
