@@ -4,6 +4,8 @@ const GCP_NAVBAR_DEFAULT_COLOR = "#1a73e8";
 
 const browser = require("webextension-polyfill/dist/browser-polyfill.min");
 const storage = new BrowserStorage(browser.storage.sync);
+
+// high level await not yet supported
 storage.getStyleRules().then((styleRules) => {
   listenForUrlChange(styleRules);
 });
@@ -22,16 +24,7 @@ function listenForUrlChange(styleRules) {
   const observer = new MutationObserver(() => {
     if (window.location.href !== previousUrl) {
       previousUrl = window.location.href;
-      let projectId = getProjectId();
-      changeBarColor(GCP_NAVBAR_DEFAULT_COLOR);
-      styleRules.gcpStyleRules
-        .filter((rule) => {
-          let regex = new RegExp(`^${rule.pattern}$`);
-          return regex.test(projectId);
-        })
-        .forEach((rule) => {
-          changeBarColor(rule.styles[0].value);
-        });
+      applyStyleRules(styleRules);
     }
   });
   const config = { subtree: true, childList: true };
@@ -52,4 +45,22 @@ function changeBarColor(color) {
 
   console.log("Changing color of nav bar to " + color);
   banner[0].style.backgroundColor = color;
+}
+
+function resetStyleToDefault() {
+  changeBarColor(GCP_NAVBAR_DEFAULT_COLOR);
+}
+
+function applyStyleRules(styleRules) {
+  resetStyleToDefault();
+
+  let projectId = getProjectId();
+  styleRules.gcpStyleRules
+    .filter((rule) => {
+      let regex = new RegExp(`^${rule.pattern}$`);
+      return regex.test(projectId);
+    })
+    .forEach((rule) => {
+      changeBarColor(rule.styles[0].value);
+    });
 }
