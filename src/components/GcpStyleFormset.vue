@@ -37,9 +37,7 @@
         :class="{ unsaved: isUnsaved(), shake: shake, disabled: isInvalid() }"
         @click="save"
       >
-        <span v-if="isInvalid()"
-          >Invalid <span class="material-symbols-outlined">block </span></span
-        >
+        <span v-if="isInvalid()">Invalid</span>
         <span v-else-if="unsaved">Save</span>
         <span v-else>Saved</span>
       </button>
