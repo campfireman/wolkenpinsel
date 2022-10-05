@@ -42,7 +42,6 @@ export default {
           "This color is not supported by CSS3."
         );
       }
-      console.log(this.validationErrors);
       this.$emit("validate", "gcpNavbarColor", this.validationErrors);
     },
     conditionalValidate(input) {

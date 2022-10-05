@@ -129,11 +129,9 @@ export default {
       return Object.keys(this.gcpValidationErrors).length > 0;
     },
     updateValidationErrors(key, values) {
-      console.log(`values: ${JSON.stringify(values)}`);
       if (Object.keys(values).length > 0) {
         this.$set(this.gcpValidationErrors, key, values);
       } else {
-        console.log("deleting");
         this.$delete(this.gcpValidationErrors, key);
       }
     },

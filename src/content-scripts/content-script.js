@@ -30,7 +30,6 @@ function listenForUrlChange(styleRules) {
           return regex.test(projectId);
         })
         .forEach((rule) => {
-          console.log(rule);
           changeBarColor(rule.styles[0].value);
         });
     }
