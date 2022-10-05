@@ -163,6 +163,7 @@ tr {
 .disabled {
   background-color: var(--red) !important;
   outline-color: var(--red) !important;
+  border: none;
 }
 
 .unsaved {
