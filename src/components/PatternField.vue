@@ -6,7 +6,6 @@ export default {
   data: () => {
     return {
       label: "Project ID",
-      fieldKey: "pattern",
       validators: [
         {
           test: (input) => {

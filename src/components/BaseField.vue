@@ -1,14 +1,8 @@
 <template>
   <label
     >{{ label }}
-    <input
-      :style="{
-        border: '5px solid ' + inputValue,
-      }"
-      type="text"
-      v-model="inputValue"
-    />
-    <ul v-if="isInvalid()">
+    <input type="text" v-model="inputValue" />
+    <ul>
       <li v-for="(error, key) in validationErrors" :key="key" class="error">
         <span class="material-symbols-outlined">warning</span>
         {{ error }}
@@ -19,40 +13,29 @@
 
 <script>
 export default {
-  props: ["value", "prefix"],
+  props: ["value"],
   data: () => {
     return {
       label: "Field",
-      fieldKey: "",
       validators: [],
-      validationErrors: {},
+      validationErrors: [],
     };
   },
   methods: {
     validate(input) {
-      console.log(
-        `before validation: ${JSON.stringify(this.validationErrors)}`
-      );
+      this.validationErrors = [];
       this.validators.forEach((validator) => {
         if (validator.test(input)) {
           if (validator.errorKey in this.validationErrors) {
             this.$delete(this.validationErrors, validator.errorKey);
           }
         } else {
-          this.$set(
-            this.validationErrors,
-            validator.errorKey,
-            validator.errorMessage
-          );
+          this.validationErrors.push(validator.errorMessage);
         }
       });
-      this.$emit("validate", this.prefix, this.fieldKey, this.validationErrors);
-      console.log(
-        `after  validation: ${JSON.stringify(this.validationErrors)}`
-      );
     },
     isInvalid() {
-      return Object.keys(this.validationErrors).length > 0;
+      return Object.keys(this.validationErrors).length != 0;
     },
   },
   computed: {

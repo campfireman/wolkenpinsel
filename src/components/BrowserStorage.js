@@ -1,29 +1,23 @@
+import StyleRule from "./StyleRule";
+import StyleRuleStorage from "./StyleRuleStorage";
+
 class BrowserStorage {
   STORAGE_EXTENSION_KEY = "wolkenpinsel";
-  STORAGE_TEMPLATE_100 = {
-    formatVersion: "1.0.0",
-    gcpStyleRules: [],
-  };
-  STORAGE_TEMPLATE = this.STORAGE_TEMPLATE_100;
+  storage;
 
   constructor(storage) {
     this.storage = storage;
     this.migrate();
   }
 
-  deepCopy(obj) {
-    return JSON.parse(JSON.stringify(obj));
-  }
-
   async migrate010() {
     let data = await this.storage.get("gcpColorSettings");
     if (data.gcpColorSettings) {
-      let newSettings = this.deepCopy(this.STORAGE_TEMPLATE_100);
+      let newSettings = new StyleRuleStorage();
       for (const [key, value] of Object.entries(data.gcpColorSettings)) {
-        newSettings.gcpStyleRules.push({
-          pattern: key,
-          styles: [{ name: "gcpNavbarColor", value: value.navbarColor }],
-        });
+        newSettings.gcpStyleRules.push(
+          StyleRule.createDefaultGcp(key, value.navbarColor)
+        );
       }
       this.storage.set({ [this.STORAGE_EXTENSION_KEY]: newSettings });
       await this.storage.remove("gcpColorSettings");
@@ -43,8 +37,8 @@ class BrowserStorage {
     if (data[this.STORAGE_EXTENSION_KEY]) {
       return data[this.STORAGE_EXTENSION_KEY];
     }
-    return this.deepCopy(this.STORAGE_TEMPLATE);
+    return new StyleRuleStorage();
   }
 }
 
-module.exports = BrowserStorage;
+export default BrowserStorage;

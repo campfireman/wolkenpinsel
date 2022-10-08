@@ -54,6 +54,7 @@ wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-softwar
         "formatVersion": "1.0.0",
         "gcpStyleRules": [
             {
+                "id": "e553c452-1c65-409e-8834-0ae060a59213",
                 "pattern": ".*live.*",
                 "styles": [
                     {

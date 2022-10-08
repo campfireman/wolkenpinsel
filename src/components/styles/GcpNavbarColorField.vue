@@ -1,3 +1,22 @@
+<template>
+  <label
+    >{{ label }}
+    <input
+      :style="{
+        border: '5px solid ' + inputValue,
+      }"
+      type="text"
+      v-model="inputValue"
+    />
+    <ul>
+      <li v-for="(error, key) in validationErrors" :key="key" class="error">
+        <span class="material-symbols-outlined">warning</span>
+        {{ error }}
+      </li>
+    </ul>
+  </label>
+</template>
+
 <script>
 import Field from "../BaseField.vue";
 
@@ -7,7 +26,6 @@ export default {
   data: () => {
     return {
       label: "Navbar Color",
-      fieldKey: "navbarColor",
       validators: [
         {
           test: (input) => {

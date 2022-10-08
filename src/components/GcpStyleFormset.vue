@@ -3,24 +3,22 @@
     <form>
       <table>
         <tbody>
-          <tr v-for="(rule, i) in styleRules.gcpStyleRules" :key="i">
+          <tr v-for="(rule, i) in styleRules.gcpStyleRules" :key="rule.id">
             <td>
               <PatternField
                 v-model="rule.pattern"
-                :prefix="i"
+                :ref="storeFields"
                 @input="setUnsaved"
-                @validate="updateValidationErrors"
               />
             </td>
             <td>
               <component
-                v-for="(style, j) in rule.styles"
-                :key="j"
-                :prefix="i"
+                v-for="style in rule.styles"
+                :key="style.name"
+                :ref="storeFields"
                 v-bind:is="style.name + 'Field'"
                 v-model="style.value"
                 @input="setUnsaved"
-                @validate="updateValidationErrors"
               />
             </td>
             <td>
@@ -45,7 +43,6 @@
         <span v-else>Saved</span>
       </button>
     </form>
-    {{ gcpValidationErrors }}
   </div>
 </template>
 
@@ -53,6 +50,7 @@
 import BrowserStorage from "./BrowserStorage";
 import PatternField from "./PatternField.vue";
 import RandomGenerator from "./RandomGenerator";
+import StyleRule from "./StyleRule";
 import gcpNavbarColorField from "./styles/GcpNavbarColorField.vue";
 
 const browser = require("webextension-polyfill/dist/browser-polyfill.min");
@@ -67,7 +65,7 @@ export default {
   data() {
     return {
       styleRules: {},
-      gcpValidationErrors: {},
+      fields: [],
       unsaved: false,
       shake: false,
       disabled: false,
@@ -77,7 +75,6 @@ export default {
     this.loadSettings();
     this.setUnsavedChangesConfirmation();
   },
-  computed: {},
   methods: {
     addRandomGcpStyleRule() {
       this.addGcpStyleRule(
@@ -86,20 +83,13 @@ export default {
       );
     },
     addGcpStyleRule(projectId, navbarColor) {
-      this.styleRules.gcpStyleRules.push({
-        pattern: projectId,
-        styles: [
-          {
-            name: "gcpNavbarColor",
-            value: navbarColor,
-          },
-        ],
-      });
+      this.styleRules.gcpStyleRules.push(
+        StyleRule.createDefaultGcp(projectId, navbarColor)
+      );
       this.setUnsaved();
     },
     deleteGcpStyleRule(index) {
       this.styleRules.gcpStyleRules.splice(index, 1);
-      this.deleteRowFromValidation(index);
       this.setUnsaved();
     },
     save(e) {
@@ -128,26 +118,21 @@ export default {
       window.onbeforeunload = () => (this.unsaved ? true : null);
     },
     isValid() {
-      return Object.keys(this.gcpValidationErrors).length == 0;
+      return (
+        this.fields.filter((field) => {
+          return (
+            field != null &&
+            !field._isDestroyed &&
+            field.validationErrors.length != 0
+          );
+        }).length == 0
+      );
     },
     isInvalid() {
-      return Object.keys(this.gcpValidationErrors).length > 0;
+      return !this.isValid();
     },
-    deleteRowFromValidation(prefix) {
-      this.$delete(this.gcpValidationErrors, prefix);
-    },
-    updateValidationErrors(prefix, fieldKey, values) {
-      if (!(prefix in this.gcpValidationErrors)) {
-        this.$set(this.gcpValidationErrors, prefix, {});
-      }
-      if (Object.keys(values).length > 0) {
-        this.$set(this.gcpValidationErrors[prefix], fieldKey, values);
-      } else {
-        this.$delete(this.gcpValidationErrors[prefix], fieldKey);
-        if (Object.keys(this.gcpValidationErrors[prefix]).length == 0) {
-          this.deleteRowFromValidation(prefix);
-        }
-      }
+    storeFields(element) {
+      this.fields.push(element);
     },
     isUnsaved() {
       return this.isValid() && this.unsaved;

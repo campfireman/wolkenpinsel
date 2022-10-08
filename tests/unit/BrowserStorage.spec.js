@@ -1,4 +1,17 @@
 import BrowserStorage from "@/components/BrowserStorage";
+import StyleRule from "@/components/StyleRule";
+
+const STYLE_RULE_ID = "d8326284-1e56-46ca-8d4b-a3ee116263d6";
+
+beforeAll(() => {
+  jest
+    .spyOn(StyleRule.prototype, "createId")
+    .mockImplementation(() => STYLE_RULE_ID);
+});
+
+afterAll(() => {
+  jest.restoreAllMocks();
+});
 
 describe("migrate010", () => {
   test("Old format is replaced correctly", async () => {
@@ -12,6 +25,7 @@ describe("migrate010", () => {
       formatVersion: "1.0.0",
       gcpStyleRules: [
         {
+          id: STYLE_RULE_ID,
           pattern: "test-project01",
           styles: [{ name: "gcpNavbarColor", value: "red" }],
         },
