@@ -15,17 +15,20 @@
         </li>
       </ul>
     </label>
-    <div v-if="helpVisible">
-      <dialog open v-if="helpVisible" @keyup.esc="closeHelp">
-        <article class="help-modal">
-          <a aria-label="Close" class="close button" @click="closeHelp"></a>
-          <h3>Help: {{ label }}</h3>
-          <div>
-            <slot name="help-text" />
-          </div>
-        </article>
-      </dialog>
-    </div>
+    <dialog open v-if="helpVisible" @keyup.esc="closeHelp">
+      <article
+        class="help-modal"
+        ref="helpModal"
+        :rendered="helpRendered"
+        v-click-outside="closeHelp"
+      >
+        <a aria-label="Close" class="close button" @click="closeHelp"></a>
+        <h3>Help: {{ label }}</h3>
+        <div>
+          <slot name="help-text" />
+        </div>
+      </article>
+    </dialog>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ export default {
   data: () => {
     return {
       helpVisible: false,
+      helpRendered: false,
     };
   },
   created() {
@@ -44,11 +48,15 @@ export default {
     openHelp() {
       if (!this.helpVisible) {
         this.helpVisible = true;
+        setTimeout(() => {
+          this.helpRendered = true;
+        }, 20);
       }
     },
     closeHelp() {
       if (this.helpVisible) {
         this.helpVisible = false;
+        this.helpRendered = false;
       }
     },
     closeHelpWithEsc(e) {
