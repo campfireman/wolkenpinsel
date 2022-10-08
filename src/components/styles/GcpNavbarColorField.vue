@@ -1,6 +1,5 @@
 <template>
-  <label
-    >{{ label }}
+  <BaseFieldTemplate :validationErrors="validationErrors" :label="label">
     <input
       :style="{
         border: '5px solid ' + inputValue,
@@ -8,21 +7,17 @@
       type="text"
       v-model="inputValue"
     />
-    <ul>
-      <li v-for="(error, key) in validationErrors" :key="key" class="error">
-        <span class="material-symbols-outlined">warning</span>
-        {{ error }}
-      </li>
-    </ul>
-  </label>
+  </BaseFieldTemplate>
 </template>
 
 <script>
-import Field from "../BaseField.vue";
+import BaseField from "../BaseField.vue";
+import BaseFieldTemplate from "../BaseFieldTemplate.vue";
 
 export default {
   name: "gcpNavbarColorField",
-  mixins: [Field],
+  mixins: [BaseField],
+  components: { BaseFieldTemplate },
   data: () => {
     return {
       label: "Navbar Color",
