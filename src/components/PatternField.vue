@@ -5,6 +5,14 @@
         <div class="regex-prefix">/^</div>
         <input type="text" v-model="inputValue" />
         <div class="regex-postfix">$/</div>
+        <a
+          class="regex-run"
+          data-tooltip="Run on regex101"
+          :href="getRegexExampleUrl(inputValue)"
+          target="_blank"
+        >
+          <i class="fa-solid fa-play"></i>
+        </a>
       </div>
     </template>
     <template v-slot:help-text>
@@ -105,5 +113,12 @@ input {
 .regex-postfix {
   font-size: 1rem;
   color: var(--grey);
+}
+
+.regex-run {
+  font-size: 1.5rem;
+  color: var(--green);
+  cursor: pointer;
+  margin: 0 0 0 1rem;
 }
 </style>

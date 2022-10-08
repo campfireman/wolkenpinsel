@@ -19,8 +19,9 @@
         >
         to colorize the background of the
         <a href="https://console.cloud.google.com/" target="_blank"
-          >Google Cloud Console</a
-        >.
+          >Google Cloud Console's</a
+        >
+        navigation bar.
       </p>
       <h4>Examples:</h4>
       <ul>
