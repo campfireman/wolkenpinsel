@@ -28,7 +28,10 @@ build-chrome: build-v3 package-chrome
 
 release:
 	[[ ! -z "$(release_tag)" ]]
-	git tag $(release_tag)
+	[[ -z "$(shell git status -s)" ]]
 	tmpfile=$(shell mktemp) && jq '.version = "$(release_tag)"' $(PROJECT_DIR)/package.json > $${tmpfile} && mv $${tmpfile} $(PROJECT_DIR)/package.json
+	git add $(PROJECT_DIR)/package.json
+	git commit -m "Release of version $(release_tag)"
+	git tag $(release_tag)
 
 full-release: release build-firefox build-chrome
