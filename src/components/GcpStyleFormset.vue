@@ -23,8 +23,8 @@
             </td>
             <td>
               <a class="" @click="deleteGcpStyleRule(i)"
-                ><span class="material-symbols-outlined delete">delete</span></a
-              >
+                ><i class="fa-solid fa-trash-can delete"
+              /></a>
             </td>
           </tr>
         </tbody>
@@ -38,7 +38,9 @@
         :class="{ unsaved: isUnsaved(), shake: shake, disabled: isInvalid() }"
         @click="save"
       >
-        <span v-if="isInvalid()">Invalid</span>
+        <span v-if="isInvalid()"
+          >Invalid <i class="fa-solid fa-triangle-exclamation" />
+        </span>
         <span v-else-if="unsaved">Save</span>
         <span v-else>Saved</span>
       </button>
@@ -144,9 +146,6 @@ export default {
 <style scoped>
 tr {
   transition: cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-.material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 48;
 }
 
 .delete {
