@@ -12,11 +12,7 @@ export default {
     validate(input) {
       this.validationErrors = [];
       this.validators.forEach((validator) => {
-        if (validator.test(input)) {
-          if (validator.errorKey in this.validationErrors) {
-            this.$delete(this.validationErrors, validator.errorKey);
-          }
-        } else {
+        if (!validator.test(input)) {
           this.validationErrors.push(validator.errorMessage);
         }
       });
