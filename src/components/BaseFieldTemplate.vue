@@ -92,5 +92,6 @@ ul li {
 
 .error {
   color: var(--red);
+  margin-top: calc(var(--typography-spacing-vertical) * 0.25);
 }
 </style>
