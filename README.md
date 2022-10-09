@@ -41,6 +41,7 @@ wolkenpinsel aspires to be [Comfy Software](https://catgirl.ai/log/comfy-softwar
 - [x] Add support for regex
 - [ ] Add rule for changing the GCP Avatar
 - [ ] Add selenium GUI tests
+- [ ] Add automatic screenshot creation for release
 - [ ] Update logo to use colors form stylesheet
 
 ## Documentation
