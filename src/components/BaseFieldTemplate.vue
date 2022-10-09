@@ -78,6 +78,10 @@ export default {
   cursor: pointer;
 }
 
+article {
+  font-size: 1rem;
+}
+
 .help-modal {
   width: 700px;
 }
