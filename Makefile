@@ -17,6 +17,7 @@ build-v3:
 package-firefox:
 	[[ ! -z "$(release_tag)" ]]
 	$(call package,firefox,xpi)
+	git archive --format zip --output ./wolkenpinsel-$(release_tag).zip master
 
 package-chrome:
 	[[ ! -z "$(release_tag)" ]]
